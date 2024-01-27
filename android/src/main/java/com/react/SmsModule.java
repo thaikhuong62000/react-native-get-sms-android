@@ -121,7 +121,10 @@ public class SmsModule extends ReactContextBaseJavaModule /*implements LoaderMan
                     c++;
                 }
             }
-            cursor.close();
+            // I faced a NPE here, plus it's a good practice to have a null check.
+            if (cursor != null) {
+                cursor.close();
+            }
             try {
                 successCallback.invoke(c, jsons.toString());
             } catch (Exception e) {
@@ -129,7 +132,6 @@ public class SmsModule extends ReactContextBaseJavaModule /*implements LoaderMan
             }
         } catch (JSONException e) {
             errorCallback.invoke(e.getMessage());
-            return;
         }
     }
 
@@ -188,7 +190,6 @@ public class SmsModule extends ReactContextBaseJavaModule /*implements LoaderMan
                     successCallback.invoke("OK");
                 } catch (PendingIntent.CanceledException e) {
                     errorCallback.invoke(e.getMessage());
-                    return;
                 }
             }
             return;
@@ -211,7 +212,6 @@ public class SmsModule extends ReactContextBaseJavaModule /*implements LoaderMan
             return;
         } catch (Exception e) {
             errorCallback.invoke(e.getMessage());
-            return;
         }
     }
 
